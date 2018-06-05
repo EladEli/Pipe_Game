@@ -14,6 +14,7 @@ public class PipeGameSolver implements Solver {
     @Override
     public void solve(String problem) {
         _message = "Death";
+        System.out.println(problem);
     }
 
     @Override

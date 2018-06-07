@@ -1,4 +1,4 @@
-package com;
+package DemoClient;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

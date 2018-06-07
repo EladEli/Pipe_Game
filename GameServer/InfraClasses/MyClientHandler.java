@@ -1,5 +1,6 @@
 package GameServer.InfraClasses;
 
+import GameServer.DataClasses.GameLevel;
 import GameServer.Interfaces.ClientHandler;
 
 import java.io.*;
@@ -14,7 +15,7 @@ public class MyClientHandler implements ClientHandler {
     }
 
     @Override
-    public void handle(InputStream inputStream, OutputStream outputStream) {
+    public void handle(InputStream inputStream, OutputStream outputStream) throws IOException {
         String solution = _fileCacheManager.load();
         if(solution == null)
         {

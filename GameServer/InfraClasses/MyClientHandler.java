@@ -16,7 +16,7 @@ public class MyClientHandler implements ClientHandler {
 
     @Override
     public void handle(InputStream inputStream, OutputStream outputStream) throws IOException {
-        String solution = _fileCacheManager.load();
+        String solution = _fileCacheManager.load("at work");
         if(solution == null)
         {
             _pipeGameSolver.solve(GetString(inputStream));

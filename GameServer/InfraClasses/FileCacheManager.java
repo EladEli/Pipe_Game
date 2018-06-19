@@ -4,66 +4,41 @@ import GameServer.DataClasses.GameLevel;
 import GameServer.Interfaces.CacheManager;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 
 public class FileCacheManager implements CacheManager {
-    final private String _filePath = "C:\\";
-    final private String _fileName = "GameLevel";
+    final private String _fileName = "PipeGame.txt";
 
-    private Integer _numberLevel;
-    private Map<String,String> _problemToSolutionMapping;
+    private HashMap<Integer,String> _problemToSolutionMapping;
 
-    public FileCacheManager() {
-        _problemToSolutionMapping = getAllFiles();
-        _numberLevel = _problemToSolutionMapping.size();
+    public FileCacheManager() throws IOException {
+        _problemToSolutionMapping = new HashMap<>();
+        loadFile();
     }
 
     @Override
     public void save(GameLevel gameLevel) throws IOException {
-        _problemToSolutionMapping.put(gameLevel.getProblem(),gameLevel.getSolution());
-
-        createFile(gameLevel.getProblem());
-        createFile(gameLevel.getSolution());
+        _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(),gameLevel.getSolution());
+        GetOrCreateFile();
     }
 
     @Override
-    public String load(String problem) throws IOException {
-        return _problemToSolutionMapping.get(problem);
+    public void load(GameLevel gameLevel) {
+        gameLevel.SetSolution(_problemToSolutionMapping.get(gameLevel.getProblem().hashCode()));
     }
 
-    private void createFile(String gameLevel) throws IOException {
-        File file = new File(_fileName +"_"+_numberLevel + ".txt");
+    private void GetOrCreateFile() throws IOException {
+        // Need to check if the file exists and if yes so append to file(need to check if you can write only the addition,
+        // if not than create file
+        File file = new File(_fileName);
         FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(gameLevel);
+        // need to go over every KeyValuePer and write it to the fileWriter and only flush at the end
+        fileWriter.write(_problemToSolutionMapping.toString());
         fileWriter.flush();
         fileWriter.close();
     }
 
-    private HashMap<String,String> getAllFiles(){
-        //Get file names and filter to two lists: problems and solutions.
-        // foreach item in those lists call private loadFile.
-        HashMap<String,String> tempHashMap = new HashMap<>();
-        try {
-            File file = new File("dd");
-            File[] death = file.listFiles();
-            HashMap<File,File> filesToLoad = new HashMap<>();
-            for (File file1 : death) {
-                //filter to level and problem lists and make sure same length and numbers
-                filesToLoad.put(file1,file1);
-            }
-
-
-            String x = loadFile("dd");
-        }
-        catch (IOException exception)
-        {
-
-        }
-        return new HashMap<>();
-    }
-
-    private String loadFile(String filePath)throws IOException {
-        try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    private void loadFile()throws IOException {
+        try(BufferedReader br = new BufferedReader(new FileReader(_fileName))) {
 
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -73,13 +48,8 @@ public class FileCacheManager implements CacheManager {
                 sb.append(System.lineSeparator());
                 line = br.readLine();
             }
-            return sb.toString();
+
+            //needs to put items into the dictionary
         }
     }
-
-
-    private String search(){
-        return null;
-    }
-
 }

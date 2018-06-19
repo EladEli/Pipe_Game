@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface CacheManager {
     void save(GameLevel gameLevel) throws IOException;
-    String load(String problem) throws IOException;
+    void load(GameLevel problem) throws IOException;
 }

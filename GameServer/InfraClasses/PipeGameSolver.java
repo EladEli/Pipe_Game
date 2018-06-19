@@ -1,24 +1,23 @@
 package GameServer.InfraClasses;
 
+import GameServer.DataClasses.GameLevel;
 import GameServer.Interfaces.Solver;
 
 public class PipeGameSolver implements Solver {
     private String _message;
-    private Boolean isSuccess;
 
     public PipeGameSolver() {
         _message = "";
-        isSuccess = true;
     }
 
     @Override
-    public void solve(String problem) {
+    public void solve(GameLevel gameLevel) {
         _message = "Death";
-        System.out.println(problem);
+        gameLevel.SetSolution(_message);
     }
 
     @Override
     public void createProblem() {
-        isSuccess = false;
+        //Will be called by MyClientHandler, will return a full GameLevel that needs to be Saved to cache.
     }
 }

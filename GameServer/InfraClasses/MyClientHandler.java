@@ -16,11 +16,15 @@ public class MyClientHandler implements ClientHandler {
 
     @Override
     public void handle(InputStream inputStream, OutputStream outputStream) throws IOException {
-        String solution = _fileCacheManager.load("at work");
-        if(solution == null)
+        GameLevel currentLevel = new GameLevel(GetString(inputStream));
+        _fileCacheManager.load(currentLevel);
+        if(!currentLevel.IsSolved())
         {
-            _pipeGameSolver.solve(GetString(inputStream));
+            _pipeGameSolver.solve(currentLevel);
+            _fileCacheManager.save(currentLevel);
         }
+
+        //Send back the solution
     }
 
     private String GetString(InputStream inputStream)

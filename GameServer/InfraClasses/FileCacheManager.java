@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class FileCacheManager implements CacheManager {
     final private String _fileName = "PipeGame.txt";
-    private boolean _fileExists; // flag
     private FileWriter _fileWriter;
     private File _file;
 
@@ -18,13 +17,12 @@ public class FileCacheManager implements CacheManager {
 
     public FileCacheManager() throws IOException {
         _problemToSolutionMapping = new HashMap<>();
-        loadFile();
+        createFile();
     }
 
     @Override
     public void save(GameLevel gameLevel) throws IOException {
         _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(), gameLevel.getSolution());
-        GetOrCreateFile();
     }
 
     @Override
@@ -34,9 +32,9 @@ public class FileCacheManager implements CacheManager {
 
     private void GetOrCreateFile() throws IOException {
         createFile();
-        _fileWriter.write(_problemToSolutionMapping.toString());
-        _fileWriter.flush();
-        _fileWriter.close();
+//        _fileWriter.write(_problemToSolutionMapping.toString());
+//        _fileWriter.flush();
+//        _fileWriter.close();
 
         // Need to check if the _file exists and if yes so append to _file(need to check if you can write only the addition,
         // if not than create _file
@@ -45,8 +43,6 @@ public class FileCacheManager implements CacheManager {
     }
 
     private void loadFile() throws IOException {
-        createFile();
-
         try (BufferedReader br = new BufferedReader(new FileReader(_fileName))) {
 
             StringBuilder sb = new StringBuilder();
@@ -62,19 +58,25 @@ public class FileCacheManager implements CacheManager {
         }
     }
 
-    private void FileExists(){
+    private boolean FileExists(){
         if(Files.exists(Paths.get(_fileName))) {
-            _fileExists = true;
+            return true;
         }
-        _fileExists =false;
+        return false;
 
     }
 
     private void createFile() throws IOException {
-        if(!_fileExists){
+        if(!FileExists()){
             _file = new File(_fileName);
             _fileWriter = new FileWriter(_file);
         }
 
+    }
+
+    private void saveSolutionToFile(String saveSolution) throws IOException {
+        _fileWriter.write(_problemToSolutionMapping.toString());
+        _fileWriter.flush();
+        _fileWriter.close();
     }
 }

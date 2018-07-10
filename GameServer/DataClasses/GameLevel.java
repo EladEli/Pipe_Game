@@ -4,9 +4,11 @@ public class GameLevel {
     private String _problem;
     private String _solution;
 
-    public Boolean IsSolved(){ return _solution != null; }
+    public Boolean IsSolved(){
+        return _solution != null;
+    }
 
-    public GameLevel(String problem)  {
+    public GameLevel(String problem){
         _problem = problem;
     }
 
@@ -14,7 +16,11 @@ public class GameLevel {
         return _problem;
     }
 
-    public String getSolution(){ return _solution; }
+    public String getSolution(){
+        return _solution;
+    }
 
-    public void SetSolution(String solution) { _solution = solution; }
+    public void SetSolution(String solution) {
+        _solution = solution;
+    }
 }

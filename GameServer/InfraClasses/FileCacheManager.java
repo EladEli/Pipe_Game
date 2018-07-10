@@ -3,12 +3,18 @@ package GameServer.InfraClasses;
 import GameServer.DataClasses.GameLevel;
 import GameServer.Interfaces.CacheManager;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class FileCacheManager implements CacheManager {
     final private String _fileName = "PipeGame.txt";
+    private boolean _fileExists; // flag
+    private FileWriter _fileWriter;
+    private File _file;
 
-    private HashMap<Integer,String> _problemToSolutionMapping;
+    private HashMap<Integer, String> _problemToSolutionMapping;
+
 
     public FileCacheManager() throws IOException {
         _problemToSolutionMapping = new HashMap<>();
@@ -17,7 +23,7 @@ public class FileCacheManager implements CacheManager {
 
     @Override
     public void save(GameLevel gameLevel) throws IOException {
-        _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(),gameLevel.getSolution());
+        _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(), gameLevel.getSolution());
         GetOrCreateFile();
     }
 
@@ -27,18 +33,21 @@ public class FileCacheManager implements CacheManager {
     }
 
     private void GetOrCreateFile() throws IOException {
-        // Need to check if the file exists and if yes so append to file(need to check if you can write only the addition,
-        // if not than create file
-        File file = new File(_fileName);
-        FileWriter fileWriter = new FileWriter(file);
-        // need to go over every KeyValuePer and write it to the fileWriter and only flush at the end
-        fileWriter.write(_problemToSolutionMapping.toString());
-        fileWriter.flush();
-        fileWriter.close();
+        createFile();
+        _fileWriter.write(_problemToSolutionMapping.toString());
+        _fileWriter.flush();
+        _fileWriter.close();
+
+        // Need to check if the _file exists and if yes so append to _file(need to check if you can write only the addition,
+        // if not than create _file
+        // need to go over every KeyValuePer and write it to the _fileWriter and only flush at the end
+
     }
 
-    private void loadFile()throws IOException {
-        try(BufferedReader br = new BufferedReader(new FileReader(_fileName))) {
+    private void loadFile() throws IOException {
+        createFile();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(_fileName))) {
 
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -51,5 +60,21 @@ public class FileCacheManager implements CacheManager {
 
             //needs to put items into the dictionary
         }
+    }
+
+    private void FileExists(){
+        if(Files.exists(Paths.get(_fileName))) {
+            _fileExists = true;
+        }
+        _fileExists =false;
+
+    }
+
+    private void createFile() throws IOException {
+        if(!_fileExists){
+            _file = new File(_fileName);
+            _fileWriter = new FileWriter(_file);
+        }
+
     }
 }

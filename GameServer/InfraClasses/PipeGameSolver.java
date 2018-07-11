@@ -7,6 +7,7 @@ public class PipeGameSolver implements Solver {
     private String _message;
 
     public PipeGameSolver() {
+
         _message = "";
     }
 

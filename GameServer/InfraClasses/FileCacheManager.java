@@ -21,7 +21,7 @@ public class FileCacheManager implements CacheManager {
     }
 
     @Override
-    public void save(GameLevel gameLevel) throws IOException {
+    public void save(GameLevel gameLevel){
         _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(), gameLevel.getSolution());
     }
 
@@ -30,32 +30,26 @@ public class FileCacheManager implements CacheManager {
         gameLevel.SetSolution(_problemToSolutionMapping.get(gameLevel.getProblem().hashCode()));
     }
 
-    private void GetOrCreateFile() throws IOException {
-        createFile();
+//    private void GetOrCreateFile() throws IOException {
+//        createFile();
 //        _fileWriter.write(_problemToSolutionMapping.toString());
 //        _fileWriter.flush();
 //        _fileWriter.close();
-
-        // Need to check if the _file exists and if yes so append to _file(need to check if you can write only the addition,
-        // if not than create _file
-        // need to go over every KeyValuePer and write it to the _fileWriter and only flush at the end
-
-    }
+//
+//         Need to check if the _file exists and if yes so append to _file(need to check if you can write only the addition,
+//         if not than create _file
+//         need to go over every KeyValuePer and write it to the _fileWriter and only flush at the end
+//
+//    }
 
     private void loadFile() throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(_fileName))) {
-
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
+            BufferedReader br = new BufferedReader(new FileReader(_fileName));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String parts[] = line.split("\t");
+                _problemToSolutionMapping.put(Integer.valueOf(parts[0]), parts[1]);
             }
-
             //needs to put items into the dictionary
-        }
     }
 
     private boolean FileExists(){
@@ -63,7 +57,6 @@ public class FileCacheManager implements CacheManager {
             return true;
         }
         return false;
-
     }
 
     private void createFile() throws IOException {
@@ -74,9 +67,13 @@ public class FileCacheManager implements CacheManager {
 
     }
 
-    private void saveSolutionToFile(String saveSolution) throws IOException {
-        _fileWriter.write(_problemToSolutionMapping.toString());
+    private void saveProblemToFile(String problem) throws IOException {
+        _fileWriter.write(problem);
         _fileWriter.flush();
         _fileWriter.close();
+    }
+
+    private boolean problemExists(int hashCodeNumber){
+        return false;
     }
 }

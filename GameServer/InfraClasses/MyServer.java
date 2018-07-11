@@ -39,7 +39,7 @@ public class MyServer implements Server {
 
     private void runServer() throws Exception {
         ServerSocket localServer= new ServerSocket(_port);
-        localServer.setSoTimeout(100000000);
+        localServer.setSoTimeout(100000);
         while(!_stop)
         {
             try{

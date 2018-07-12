@@ -21,8 +21,9 @@ public class FileCacheManager implements CacheManager {
     }
 
     @Override
-    public void save(GameLevel gameLevel){
+    public void save(GameLevel gameLevel) throws IOException {
         _problemToSolutionMapping.put(gameLevel.getProblem().hashCode(), gameLevel.getSolution());
+        saveProblemToFile(_problemToSolutionMapping.toString());
     }
 
     @Override
@@ -59,10 +60,11 @@ public class FileCacheManager implements CacheManager {
         return false;
     }
 
-    private void createFile() throws IOException {
+    private void  createFile() throws IOException {
         if(!FileExists()){
             _file = new File(_fileName);
-            _fileWriter = new FileWriter(_file);
+            _fileWriter = new FileWriter(_file,true);
+
         }
 
     }

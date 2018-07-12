@@ -13,7 +13,7 @@ public class PipeGameSolver implements Solver {
 
     @Override
     public void solve(GameLevel gameLevel) {
-        _message = "Death";
+        _message = "Death2";
         gameLevel.SetSolution(_message);
     }
 
